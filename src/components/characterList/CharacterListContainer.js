@@ -1,109 +1,76 @@
-import { PureComponent } from 'react';
+import { useEffect, useState, memo } from 'react';
 import { MarvelAPI } from '../../services/Api';
-import PropTypes from 'prop-types';
 import CharacterList from './CharacterList';
 import ErrorMessage from '../secondaryComponents/errorMessage/Error';
 import Spinner from '../secondaryComponents/spinner/Spinner';
 
-class CharacterListContainer extends PureComponent {
+const marvelAPI = new MarvelAPI();
 
-    state = {
-        charList: [],
-        startLoading: true,
-        error: false,
-        offsetCharacters: 210,
-        newLoading: true,
-        end: false
+const CharacterListContainer = (props) => {
+
+    const [charList, setCharList] = useState([]);
+    const [startLoading, setStartLoading] = useState(true);
+    const [error, setError] = useState(false);
+    const [newLoading, setNewLoading] = useState(true);
+    const [end, setEnd] = useState(false);
+    const [offsetCharacters, setOffsetCharacters] = useState(210);
+
+    const downloadBegin = () => {
+        setError(false);
+        setNewLoading(true);
     }
-
-    marvelAPI = new MarvelAPI();
-
-    downloadBegin = () => {
-        this.setState({
-            error: false,
-            newLoading: true
-        })
-    }
-
-    downloadComplete = (charListNew) => {
+    const downloadComplete = (charListNew) => {
         //debugger
-        const end = (charListNew.total - this.state.offsetCharacters) > 9 ? false : true;
-        this.setState(({ charList, offsetCharacters }) => {
-            return {
-                charList: [...charList, ...charListNew.allCharacter],
-                startLoading: false,
-                newLoading: false,
-                end,
-                offsetCharacters: offsetCharacters + 9
-            }
-        })
+        const end = (charListNew.total - offsetCharacters) > 9 ? false : true;
+        setCharList((charList) => ([...charList, ...charListNew.allCharacter]));
+        setStartLoading(false);
+        setNewLoading(false);
+        setEnd(end);
+        setOffsetCharacters((offsetCharacters) => (offsetCharacters + 9));
+    }
+    const downloadError = () => {
+        setStartLoading(false);
+        setNewLoading(false);
+        setError(true);
+    }
+    const charListLoading = (offset) => {
+        downloadBegin()
+        marvelAPI.getAllCharacters(offset)
+            .then(downloadComplete)
+            .catch(downloadError);
+    }
+    const loadMoreCharacter = (offset) => {
+        charListLoading(offset);
     }
 
-    downloadError = () => {
-        this.setState({
-            startLoading: false,
-            newLoading: false,
-            error: true
-        })
+    useEffect(() => charListLoading(), [])
+
+    const errorImg = error ? <ErrorMessage /> : null;
+    const spinner = startLoading ? <Spinner /> : null;
+    // const spinner2 = !startLoading && newLoading ? <Spinner /> : null;
+    const content = !error && !startLoading ? <CharacterList charList={charList}
+        setCharItemId={props.setCharItemId} /> : null;
+    let styleBtn = {};
+    if (end || startLoading) {
+        styleBtn = { display: 'none' }
+    } else if (newLoading) {
+        styleBtn = { opacity: 0.5 }
     }
 
-    charListLoading = (offset) => {
-        this.downloadBegin()
-        this.marvelAPI.getAllCharacters(offset)
-            .then(this.downloadComplete)
-            .catch(this.downloadError);
-    }
-
-    componentDidMount() {
-        this.charListLoading();
-    }
-
-
-    loadMoreCharacter = (offset) => {
-        this.charListLoading(offset);
-    }
-
-    render() {
-
-        console.log('Render List')
-        const { charList, startLoading, error, newLoading, end, offsetCharacters } = this.state;
-        //debugger
-        const errorImg = error ? <ErrorMessage /> : null;
-        const spinner = startLoading ? <Spinner /> : null;
-        // const spinner2 = !startLoading && newLoading ? <Spinner /> : null;
-        const content = !error && !startLoading ? <CharacterList charList={charList}
-            setCharItemId={this.props.setCharItemId} /> : null;
-
-        let styleBtn = {};
-        if (end || startLoading) {
-            styleBtn = { display: 'none' }
-        } else if (newLoading) {
-            styleBtn = { opacity: 0.5 }
-        }
-
-        //debugger
-        return (
-            <div className="char__list">
-                {content}
-                {errorImg}
-                {spinner}
-                {/* {spinner2} */}
-                <button className="button button__main button__long" disabled={newLoading}
-                    style={styleBtn} onClick={() => { this.loadMoreCharacter(offsetCharacters) }}>
-                    <div className="inner">{newLoading ? 'Please, wait...' : 'load more'}</div>
-                </button>
-            </div>
-        )
-    }
-
+    //debugger
+    console.log('Render List')
+    return (
+        <div className="char__list">
+            {content}
+            {errorImg}
+            {spinner}
+            {/* {spinner2} */}
+            <button className="button button__main button__long" disabled={newLoading}
+                style={styleBtn} onClick={() => { loadMoreCharacter(offsetCharacters) }}>
+                <div className="inner">{newLoading ? 'Please, wait...' : 'load more'}</div>
+            </button>
+        </div>
+    )
 }
 
-CharacterListContainer.propTypes = {
-    setCharItemId: PropTypes.func
-}
-
-CharacterListContainer.defaultProps = {
-    setCharItemId: () => { console.log('Ничего не передано') }
-}
-
-export default CharacterListContainer;
+export default memo(CharacterListContainer);

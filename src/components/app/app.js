@@ -1,5 +1,4 @@
 import { Component } from 'react';
-import * as ReactDOM from 'react-dom';
 import ErrorBoundary from '../secondaryComponents/errorBoundary/ErrorBoundary';
 import AppHeader from '../appHeader/AppHeader';
 import RandomCharacterContainer from '../randomCharacter/RandomCharacterContainer';
@@ -8,14 +7,6 @@ import CharacterInfoContainer from '../characterInfo/CharacterInfoContainer';
 import './app.scss';
 import vision from '../../resources/img/vision.png';
 
-
-const Portal = (props) => {
-    //debugger
-    const node = document.createElement('div');
-    document.body.appendChild(node);
-    return ReactDOM.createPortal(props.children, node);
-
-}
 
 class App extends Component {
 
@@ -38,7 +29,7 @@ class App extends Component {
     render() {
         //debugger
 
-        console.log('renderApp')
+        console.log('Render App')
         return (
             <div className="app">
                 <AppHeader />

@@ -30,7 +30,6 @@ export class MarvelAPI {
             comicsTotal: character.comics.items.length,
             comics: character.comics.items
         }
-
     }
 
     getDataFromServer = async (url) => {
@@ -42,12 +41,13 @@ export class MarvelAPI {
     }
 
     getAllCharacters = async (offset = this.__offsetBase) => {
-        console.log('Запрос')
+        console.log('getAllCharacters')
         return await this.getDataFromServer(`${this.__apiBase}characters?limit=9&offset=${offset}&apikey=${this.__apiKey}`)
             .then(this._transformAllCharacter);
     }
 
     getCharacter = async (id) => {
+        console.log('getCharacter')
         return await this.getDataFromServer(`${this.__apiBase}characters/${id}?apikey=${this.__apiKey}`)
             .then(response => this._transformOneCharacter(response.data.results[0]));
     }
