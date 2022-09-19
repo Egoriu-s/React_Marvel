@@ -22,11 +22,11 @@ const CharacterListContainer = (props) => {
     const downloadComplete = (charListNew) => {
         //debugger
         const end = (charListNew.total - offsetCharacters) > 9 ? false : true;
-        setCharList((charList) => ([...charList, ...charListNew.allCharacter]));
+        setCharList(charList => [...charList, ...charListNew.allCharacter]);
         setStartLoading(false);
         setNewLoading(false);
         setEnd(end);
-        setOffsetCharacters((offsetCharacters) => (offsetCharacters + 9));
+        setOffsetCharacters(offsetCharacters => offsetCharacters + 9);
     }
     const downloadError = () => {
         setStartLoading(false);

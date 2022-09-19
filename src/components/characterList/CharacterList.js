@@ -1,48 +1,34 @@
-import React from 'react';
+import { useRef } from 'react';
 import './characterList.scss';
 
 const CharacterList = ({ charList, setCharItemId }) => {
-    //debugger
 
-    const refsCharItem = [];
-    const setRef = (ref) => {
-        refsCharItem.push(ref);
-    }
+    const refsCharItems = useRef([]);
 
-    const onFocus = (i) => {
-        refsCharItem.forEach((elem, index) => {
-            //debugger
-            if (index === i) {
-                elem.focus();
-            }
-
+    const setChar = (id, i) => {
+        setCharItemId(id)
+        refsCharItems.current.forEach((elem, index) => {
+            if (index === i) elem.focus()
         })
     }
-    const newArray = charList.map((elem, i) => {
 
+    const newArray = charList.map((elem, i) => {
         let imgStyle = elem.thumbnail === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
             ? { objectFit: 'contain' }
             : { objectFit: 'cover' }
-
         return (
             <li className="char__item" key={elem.id}
-                onClick={() => {
-                    setCharItemId(elem.id)
-                    onFocus(i)
-                }}
+                onClick={() => setChar(elem.id, i)}
                 onKeyDown={(event) => {
-                    if (event.key === 'Enter') {
-                        setCharItemId(elem.id)
-                        onFocus(i)
-                    }
+                    if (event.key === 'Enter') setChar(elem.id, i)
                 }}
-                tabIndex='0' ref={setRef}>
+                tabIndex='0' ref={elem => refsCharItems.current[i] = elem}>
                 <img src={elem.thumbnail} alt="charImg" style={imgStyle} />
                 <div className="char__name">{elem.name}</div>
             </li>
         )
     })
-    
+
     return (
         <>
             <ul className="char__grid">

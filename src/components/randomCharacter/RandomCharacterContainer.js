@@ -18,8 +18,8 @@ const RandomCharacterContainer = (props) => {
         setLoading(true);
         setError(false);
     }
-    const downloadComplete = (randomChar) => {
-        setRandomChar(randomChar);
+    const downloadComplete = (randomCharNew) => {
+        setRandomChar(randomCharNew);
         setLoading(false);
     }
     const downloadError = () => {
