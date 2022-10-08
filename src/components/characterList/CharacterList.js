@@ -1,14 +1,16 @@
 import { useRef } from 'react';
 import './characterList.scss';
 
+
 const CharacterList = ({ charList, setCharItemId }) => {
 
     const refsCharItems = useRef([]);
 
     const setChar = (id, i) => {
         setCharItemId(id)
+        // Установить фокус на элементе из массива по его ID
         refsCharItems.current.forEach((elem, index) => {
-            if (index === i) elem.focus()
+            (index === i) && elem.focus()
         })
     }
 
@@ -19,10 +21,8 @@ const CharacterList = ({ charList, setCharItemId }) => {
         return (
             <li className="char__item" key={elem.id}
                 onClick={() => setChar(elem.id, i)}
-                onKeyDown={(event) => {
-                    if (event.key === 'Enter') setChar(elem.id, i)
-                }}
-                tabIndex='0' ref={elem => refsCharItems.current[i] = elem}>
+                onKeyDown={(event) => event.key === 'Enter' && setChar(elem.id, i)}
+                tabIndex='0' ref={elem => refsCharItems.current.push(elem)}>
                 <img src={elem.thumbnail} alt="charImg" style={imgStyle} />
                 <div className="char__name">{elem.name}</div>
             </li>
@@ -40,3 +40,4 @@ const CharacterList = ({ charList, setCharItemId }) => {
 }
 
 export default CharacterList;
+

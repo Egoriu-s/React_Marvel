@@ -1,54 +1,31 @@
-import { Component } from 'react';
-import ErrorBoundary from '../secondaryComponents/errorBoundary/ErrorBoundary';
-import AppHeader from '../appHeader/AppHeader';
-import RandomCharacterContainer from '../randomCharacter/RandomCharacterContainer';
-import CharacterListContainer from '../characterList/CharacterListContainer';
-import CharacterInfoContainer from '../characterInfo/CharacterInfoContainer';
-import './app.scss';
-import vision from '../../resources/img/vision.png';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
+import AppHeader from "../appHeader/AppHeader"
+import MainPage from "../pages/MainPage"
+import ComicsPage from './../pages/ComicsPage'
+import "./app.scss"
 
+const App = () => {
 
-class App extends Component {
+  //debugger
+  console.log("Render App")
+  return (
+    <Router>
+      <div className="app">
+        <AppHeader />
+        <main>
+          <Switch>
+            <Route exact path="/">
+              <MainPage />
+            </Route>
+            <Route path="/comics">
+              <ComicsPage />
+            </Route>
+          </Switch>
+        </main>
+      </div>
+    </Router>
+  )
 
-    state = {
-        id: null
-    }
-
-    setCharItemId = (id) => {
-        this.setState({ id });
-        this.upClick();
-    }
-
-    upClick = () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth',
-        });
-    }
-
-    render() {
-        //debugger
-
-        console.log('Render App')
-        return (
-            <div className="app">
-                <AppHeader />
-                <main>
-                    <ErrorBoundary>
-                        <RandomCharacterContainer />
-                    </ErrorBoundary>
-                    <div className="char__content">
-                        <ErrorBoundary>
-                            <CharacterListContainer setCharItemId={this.setCharItemId} />
-                            <CharacterInfoContainer id={this.state.id} />
-                        </ErrorBoundary>
-                    </div>
-                    <img className="bg-decoration" src={vision} alt="vision" />
-                </main>
-            </div>
-        )
-
-    }
 }
 
-export default App;
+export default App

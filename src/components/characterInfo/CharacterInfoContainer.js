@@ -1,36 +1,22 @@
 import { useState, useEffect, memo } from 'react';
-import { MarvelAPI } from '../../services/Api';
+import useMarvelAPI from './../../services/Api';
 import CharacterInfo from './CharacterInfo';
 import ErrorMessage from '../secondaryComponents/errorMessage/Error';
 import Skeleton from '../secondaryComponents/skeleton/Skeleton';
 import Spinner from '../secondaryComponents/spinner/Spinner';
 import './characterInfo.scss';
 
-const marvelAPI = new MarvelAPI();
-
 const CharacterInfoContainer = (props) => {
 
     const [charInfo, setCharInfo] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
+    const { getCharacter, error, clearError, loading } = useMarvelAPI()
 
-    const downloadBegin = () => {
-        setLoading(true);
-        setError(false);
-    }
-    const downloadComplete = (charInfo) => {
-        setCharInfo(charInfo);
-        setLoading(false);
-    }
-    const downloadError = () => {
-        setLoading(false);
-        setError(true);
-    }
     const load = (id) => {
-        downloadBegin()
-        marvelAPI.getCharacter(id)
-            .then(downloadComplete)
-            .catch(downloadError)
+        clearError()
+        getCharacter(id)
+            .then((charInfo) => {
+                setCharInfo(charInfo)
+            })
     }
 
     useEffect(() => {
