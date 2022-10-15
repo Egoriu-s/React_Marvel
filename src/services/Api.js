@@ -33,6 +33,21 @@ const useMarvelAPI = () => {
       comics: character.comics.items,
     }
   }
+
+  const transformOneComic = (response) => {
+    //debugger
+    const comic = response.data.results[0];
+    return {
+      id: comic.id,
+      title: comic.title,
+      description: comic.description || 'There is no description',
+      language: comic.textObjects[0] ? comic.textObjects[0].language : 'en-us',
+      pageCount: comic.PageCount ? `${comic.PageCount} pages` : 'No information about the count of pages',
+      price: comic.prices[0].price ? `${comic.prices[0].price} $` : 'No information about the price of comic',
+      thumbnail: `${comic.thumbnail.path}.${comic.thumbnail.extension}`
+    }
+  }
+
   const transformAllComics = (response) => {
     //debugger;
     const total = response.data.total
@@ -40,8 +55,8 @@ const useMarvelAPI = () => {
       return {
         id: elem.id,
         title: elem.title,
-        price: elem.prices[0].price,
-        thumbnail: `${elem.thumbnail.path}.${elem.thumbnail.extension}`,
+        price: elem.prices[0].price ? `${elem.prices[0].price} $` : 'No information about the price of comic',
+        thumbnail: `${elem.thumbnail.path}.${elem.thumbnail.extension}`
       }
     })
     return { allComics, total }
@@ -62,14 +77,21 @@ const useMarvelAPI = () => {
   const getAllComics = async (offset = __offsetBaseComics) => {
     console.log("getComics")
     return await request(
-      `${__apiBase}comics?orderBy=issueNumber&limit=8&offset=${offset}&apikey=ec937b49a92b5506cf1ffa3bc211029f`
+      `${__apiBase}comics?orderBy=issueNumber&limit=8&offset=${offset}&apikey=${__apiKey}`
     ).then(transformAllComics)
+  }
+  const getComic = async (id) => {
+    console.log("getComic")
+    return await request(
+      `${__apiBase}comics/${id}?apikey=${__apiKey}`
+    ).then(transformOneComic)
   }
 
   return {
     getAllCharacters,
     getCharacter,
     getAllComics,
+    getComic,
     loading,
     error,
     clearError,

@@ -1,3 +1,4 @@
+import { memo } from "react"
 import './characterInfo.scss';
 
 const CharacterInfo = ({ charInfo }) => {
@@ -7,6 +8,8 @@ const CharacterInfo = ({ charInfo }) => {
         ? { objectFit: 'contain' }
         : { objectFit: 'cover' }
 
+    //debugger
+    console.log("Render Info JSX")
     return (
         <>
             <div className="char__basics">
@@ -46,4 +49,4 @@ const CharacterInfo = ({ charInfo }) => {
 
 }
 
-export default CharacterInfo;
+export default memo(CharacterInfo, (prevProps, newProps) => prevProps.charInfo.id === newProps.charInfo.id)

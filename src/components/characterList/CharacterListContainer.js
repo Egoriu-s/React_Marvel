@@ -1,11 +1,12 @@
-import { useEffect, useState, memo } from "react";
-import CharacterList from "./CharacterList";
-import ErrorMessage from "../secondaryComponents/errorMessage/Error";
-import Spinner from "../secondaryComponents/spinner/Spinner";
-import useMarvelAPI from "./../../services/Api";
-import "./characterList.scss";
+import { useEffect, useState, memo } from "react"
+import CharacterList from "./CharacterList"
+import ErrorMessage from "../secondaryComponents/errorMessage/Error"
+import Spinner from "../secondaryComponents/spinner/Spinner"
+import useMarvelAPI from "./../../services/Api"
+import "./characterList.scss"
 
 const CharacterListContainer = (props) => {
+
   const [charList, setCharList] = useState([])
   const [newLoading, setNewLoading] = useState(false)
   const [end, setEnd] = useState(false)
@@ -24,7 +25,7 @@ const CharacterListContainer = (props) => {
     getAllCharacters(offset)
       .then(downloadComplete)
       .finally(() => {
-        setNewLoading(false);
+         ;
       })
   }
   const loadMoreCharacter = (offset) => charListLoading(offset)
@@ -33,17 +34,19 @@ const CharacterListContainer = (props) => {
 
   const errorImg = error && <ErrorMessage />
   const spinner = loading && !newLoading && <Spinner />
-
+  const content = !loading && !newLoading && !error && charList.length !== 0
+    ? <CharacterList charList={charList} setCharItemId={props.setCharItemId} />
+    : []
   const styleBtn = {
-    display: (end || loading || newLoading) && "none",
+    display: (end || (loading && !newLoading)) && "none",
     opacity: newLoading && 0.5,
   }
 
   //debugger
-  console.log("Render List")
+  console.log("Render Char List")
   return (
     <div className="char__list">
-      <CharacterList charList={charList} setCharItemId={props.setCharItemId} />
+      {content}
       {errorImg}
       {spinner}
       <button

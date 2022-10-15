@@ -17,6 +17,8 @@ const MainPage = () => {
         })
     }, [])
 
+    //debugger
+    console.log('Main Page')
     return (
         <>
             <ErrorBoundary>

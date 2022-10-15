@@ -1,8 +1,12 @@
 import ComicListContainer from "../comicList/ComicListContainer"
+import AppBanner from './../appBanner/AppBanner'
 
 const ComicsPage = () => {
     return (
-        <ComicListContainer />
+        <>
+            <AppBanner />
+            <ComicListContainer />
+        </>
     )
 }
 
