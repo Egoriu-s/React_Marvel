@@ -5,6 +5,7 @@ import Spinner from "../secondaryComponents/spinner/Spinner"
 import useMarvelAPI from "./../../services/Api"
 import "./characterList.scss"
 
+
 const CharacterListContainer = (props) => {
 
   const [charList, setCharList] = useState([])
@@ -25,7 +26,7 @@ const CharacterListContainer = (props) => {
     getAllCharacters(offset)
       .then(downloadComplete)
       .finally(() => {
-         ;
+        setNewLoading(false)
       })
   }
   const loadMoreCharacter = (offset) => charListLoading(offset)
@@ -33,10 +34,7 @@ const CharacterListContainer = (props) => {
   useEffect(() => charListLoading(offsetCharacters, true), [])
 
   const errorImg = error && <ErrorMessage />
-  const spinner = loading && !newLoading && <Spinner />
-  const content = !loading && !newLoading && !error && charList.length !== 0
-    ? <CharacterList charList={charList} setCharItemId={props.setCharItemId} />
-    : []
+  const spinner = loading && !newLoading && <Spinner marginTop={50} />
   const styleBtn = {
     display: (end || (loading && !newLoading)) && "none",
     opacity: newLoading && 0.5,
@@ -46,9 +44,9 @@ const CharacterListContainer = (props) => {
   console.log("Render Char List")
   return (
     <div className="char__list">
-      {content}
       {errorImg}
       {spinner}
+        <CharacterList charList={charList} setCharItemId={props.setCharItemId} />
       <button
         className="button button__main button__long"
         disabled={newLoading}

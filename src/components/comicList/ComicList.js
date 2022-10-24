@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 const ComicList = ({ comicList }) => {
 
     const newArray = comicList.map((elem, i) => {
@@ -8,18 +9,23 @@ const ComicList = ({ comicList }) => {
                 ? { objectFit: "contain" }
                 : { objectFit: "cover" };
         return (
-            <li className="comics__item" key={elem.id}>
-                <Link to={`/comics/${elem.id}`} >
-                    <img
-                        src={elem.thumbnail}
-                        alt="comicImg"
-                        className="comics__item-img"
-                        style={imgStyle}
-                    />
-                    <div className="comics__item-name">{elem.title}</div>
-                    <div className="comics__item-price">{elem.price}</div>
-                </Link>
-            </li >
+            <CSSTransition
+                timeout={1500}
+                key={elem.id}
+                classNames="alert">
+                <li className="comics__item" key={elem.id}>
+                    <Link to={`/comics/${elem.id}`} >
+                        <img
+                            src={elem.thumbnail}
+                            alt="comicImg"
+                            className="comics__item-img"
+                            style={imgStyle}
+                        />
+                        <div className="comics__item-name">{elem.title}</div>
+                        <div className="comics__item-price">{elem.price}</div>
+                    </Link>
+                </li >
+            </CSSTransition>
         )
     })
 
@@ -28,7 +34,11 @@ const ComicList = ({ comicList }) => {
     return (
         <>
             <div className="comics__list">
-                <ul className="comics__grid">{newArray}</ul>
+                <ul className="comics__grid">
+                    <TransitionGroup component={null}>
+                        {newArray}
+                    </TransitionGroup>
+                </ul>
             </div>
         </>
     )

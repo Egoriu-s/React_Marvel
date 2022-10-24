@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import './characterList.scss';
 
 
@@ -19,13 +20,18 @@ const CharacterList = ({ charList, setCharItemId }) => {
             ? { objectFit: 'contain' }
             : { objectFit: 'cover' }
         return (
-            <li className="char__item" key={elem.id}
-                onClick={() => setChar(elem.id, i)}
-                onKeyDown={(event) => event.key === 'Enter' && setChar(elem.id, i)}
-                tabIndex='0' ref={elem => refsCharItems.current.push(elem)}>
-                <img src={elem.thumbnail} alt="charImg" style={imgStyle} />
-                <div className="char__name">{elem.name}</div>
-            </li>
+            <CSSTransition
+                timeout={1000}
+                key={elem.id}
+                classNames="alert">
+                <li className="char__item"
+                    onClick={() => setChar(elem.id, i)}
+                    onKeyDown={(event) => event.key === 'Enter' && setChar(elem.id, i)}
+                    tabIndex='0' ref={elem => refsCharItems.current.push(elem)}>
+                    <img src={elem.thumbnail} alt="charImg" style={imgStyle} />
+                    <div className="char__name">{elem.name}</div>
+                </li>
+            </CSSTransition>
         )
     })
 
@@ -34,7 +40,9 @@ const CharacterList = ({ charList, setCharItemId }) => {
     return (
         <>
             <ul className="char__grid">
-                {newArray}
+                <TransitionGroup component={null}>
+                    {newArray}
+                </TransitionGroup>
             </ul>
         </>
     )

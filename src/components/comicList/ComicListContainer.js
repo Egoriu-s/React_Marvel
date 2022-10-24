@@ -13,10 +13,11 @@ const ComicListContainer = () => {
   const { getAllComics, loading, error, clearError } = useMarvelAPI()
 
   const downloadComplete = (comicListNew) => {
-    const end = comicListNew.total - offsetComic > 8 ? false : true;
+    // const end = comicListNew.total - offsetComic > 8 ? false : true
+    const end = comicListNew.length < 8 ? true : false
     setComicList((comicList) => [...comicList, ...comicListNew.allComics])
     setEnd(end)
-    setOffsetComic((offsetComic) => offsetComic + 8)
+    setOffsetComic(offsetComic + 8)
   }
   const comicListLoading = (offset, initial = false) => {
     initial ? setNewLoading(false) : setNewLoading(true)
@@ -32,10 +33,8 @@ const ComicListContainer = () => {
   useEffect(() => comicListLoading(offsetComic, true), [])
 
   const errorImg = error && <ErrorMessage />
-  const spinner = loading && !newLoading && <Spinner />
-  const content = !loading && !newLoading && !error && comicList.length !== 0
-    ? <ComicList comicList={comicList} />
-    : []
+  const spinner = loading && !newLoading && <Spinner marginTop={250} />
+
   const styleBtn = {
     display: (end || (loading && !newLoading)) && "none",
     opacity: newLoading && 0.5,
@@ -45,9 +44,9 @@ const ComicListContainer = () => {
   console.log("Render Comic List")
   return (
     <>
-      {spinner}
       {errorImg}
-      {content}
+      {spinner}
+      <ComicList comicList={comicList} />
       <button onClick={() => loadMoreComics(offsetComic)} style={styleBtn}
         className="button button__main button__long">
         <div className="inner">load more</div>
