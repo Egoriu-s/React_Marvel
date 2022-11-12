@@ -1,10 +1,10 @@
-import { useState, useEffect, memo} from 'react';
-import useMarvelAPI from './../../services/Api';
-import Spinner from '../secondaryComponents/spinner/Spinner';
-import ErrorMessage from '../secondaryComponents/errorMessage/Error';
-import RandomCharacter from './RandomCharacter';
-import './randomCharacter.scss';
-import mjolnir from '../../resources/img/mjolnir.png';
+import { useState, useEffect, memo } from 'react'
+import useMarvelAPI from './../../services/Api'
+import Spinner from '../secondaryComponents/spinner/Spinner'
+import ErrorMessage from '../secondaryComponents/errorMessage/Error'
+import RandomCharacter from './RandomCharacter'
+import './randomCharacter.scss'
+import mjolnir from '../../resources/img/mjolnir.png'
 
 const RandomCharacterContainer = () => {
 
@@ -16,7 +16,7 @@ const RandomCharacterContainer = () => {
         clearError()
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000)
         getCharacter(id)
-            .then((randomCharNew) => setRandomChar(randomCharNew))
+            .then(randomCharNew => setRandomChar(randomCharNew))
         initial && setDisable(false)
     }
 
@@ -24,8 +24,7 @@ const RandomCharacterContainer = () => {
 
     const errorImg = error && <ErrorMessage />
     const spinner = loading && <Spinner />
-    const content = !error && !loading && !!randomChar && <RandomCharacter randomChar={randomChar} />
-
+    const content = !(loading || error || !randomChar) && <RandomCharacter randomChar={randomChar} />
     const styleBtn = { opacity: loading && 0.5 }
 
     //debugger

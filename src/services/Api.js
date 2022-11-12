@@ -1,11 +1,11 @@
-import useHttp from "./../hooks/http.hook";
+import useHttp from "./../hooks/http.hook"
 
 const useMarvelAPI = () => {
-  const __apiBase = `https://gateway.marvel.com:443/v1/public/`;
-  const __apiKey = `ec937b49a92b5506cf1ffa3bc211029f`;
-  const __offsetBaseChar = 90;
-  const __offsetBaseComics = 40;
-  const { request, loading, error, clearError } = useHttp();
+  const __apiBase = `https://gateway.marvel.com:443/v1/public/`
+  const __apiKey = `ec937b49a92b5506cf1ffa3bc211029f`
+  const __offsetBaseChar = 125
+  const __offsetBaseComics = 40
+  const { request, loading, error, clearError } = useHttp()
 
   const transformAllCharacters = (response) => {
     const total = response.data.total
@@ -17,15 +17,15 @@ const useMarvelAPI = () => {
         thumbnail: `${elem.thumbnail.path}.${elem.thumbnail.extension}`,
       }
     })
-    return { allCharacter, total };
+    return { allCharacter, total }
   }
-  const transformOneCharacter = (response) => {
-    // debugger
-    const character = response.data.results[0];
+  const transformOneCharacter = (character) => {
+    //debugger
+    if (!character) return {}
     return {
       id: character.id,
       name: character.name,
-      description: character.description,
+      description: character.description || 'There is no description',
       thumbnail: `${character.thumbnail.path}.${character.thumbnail.extension}`,
       wiki: character.urls[0].url,
       homepage: character.urls[1].url,
@@ -33,10 +33,9 @@ const useMarvelAPI = () => {
       comics: character.comics.items,
     }
   }
-
   const transformOneComic = (response) => {
     //debugger
-    const comic = response.data.results[0];
+    const comic = response.data.results[0]
     return {
       id: comic.id,
       title: comic.title,
@@ -47,7 +46,6 @@ const useMarvelAPI = () => {
       thumbnail: `${comic.thumbnail.path}.${comic.thumbnail.extension}`
     }
   }
-
   const transformAllComics = (response) => {
     //debugger;
     const total = response.data.total
@@ -68,11 +66,21 @@ const useMarvelAPI = () => {
       `${__apiBase}characters?limit=9&offset=${offset}&apikey=${__apiKey}`
     ).then(transformAllCharacters)
   }
+  // const getCharacter = async (id) => {
+  //   console.log("getCharacter")
+  //   return await request(
+  //     `${__apiBase}characters/${id}?apikey=${__apiKey}`
+  //   ).then(transformOneCharacter)
+  // }
   const getCharacter = async (id) => {
     console.log("getCharacter")
-    return await request(
-      `${__apiBase}characters/${id}?apikey=${__apiKey}`
-    ).then(transformOneCharacter)
+    const response = await request(`${__apiBase}characters/${id}?apikey=${__apiKey}`)
+    return transformOneCharacter(response.data.results[0])
+  }
+  const getCharacterByName = async (name) => {
+    console.log("getCharacterByName")
+    const response = await request(`${__apiBase}characters?name=${name}&apikey=${__apiKey}`)
+    return transformOneCharacter(response.data.results[0])
   }
   const getAllComics = async (offset = __offsetBaseComics) => {
     console.log("getComics")
@@ -90,6 +98,7 @@ const useMarvelAPI = () => {
   return {
     getAllCharacters,
     getCharacter,
+    getCharacterByName,
     getAllComics,
     getComic,
     loading,
@@ -99,4 +108,4 @@ const useMarvelAPI = () => {
 
 }
 
-export default useMarvelAPI;
+export default useMarvelAPI

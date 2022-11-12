@@ -1,8 +1,9 @@
-import { Link } from "react-router-dom";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { Link } from "react-router-dom"
+import { CSSTransition, TransitionGroup } from "react-transition-group"
+
 const ComicList = ({ comicList }) => {
 
-    const newArray = comicList.map((elem, i) => {
+    const newArray = comicList.map(elem => {
         const imgStyle =
             elem.thumbnail ===
                 "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"

@@ -1,4 +1,5 @@
 import { memo } from "react"
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import './characterInfo.scss';
 
 const CharacterInfo = ({ charInfo }) => {
@@ -12,6 +13,7 @@ const CharacterInfo = ({ charInfo }) => {
     console.log("Render Info JSX")
     return (
         <>
+
             <div className="char__basics">
                 <img src={thumbnail} alt="charImg" style={imgStyle} />
                 <div>
@@ -29,20 +31,28 @@ const CharacterInfo = ({ charInfo }) => {
             <div className="char__descr">
                 {description}
             </div>
+
             <div className="char__comics">Comics:</div>
             <ul className="char__comics-list">
-                {
-                    comics.length > 0
-                        ? comics.map((comic, index) => {
-                            if (index > 9) return;
-                            return (
-                                <li className="char__comics-item" key={index}>
-                                    {comic.name}
-                                </li>
-                            )
-                        })
-                        : 'No comics'
-                }
+                <TransitionGroup component={null}>
+                    {
+                        comics.length > 0
+                            ? comics.map((comic, index) => {
+                                if (index > 9) return;
+                                return (
+                                    <CSSTransition
+                                        timeout={5000}
+                                        key={index}
+                                        classNames="alert">
+                                        <li className="char__comics-item" key={index}>
+                                            {comic.name}
+                                        </li>
+                                    </CSSTransition>
+                                )
+                            })
+                            : 'No comics'
+                    }
+                </TransitionGroup>
             </ul>
         </>
     )

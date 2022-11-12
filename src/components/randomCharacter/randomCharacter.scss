@@ -77,3 +77,14 @@
         right: -37px;
     }
 }
+
+.alert-enter {
+    opacity: 0;
+    transform: scale(0.5);
+}
+
+.alert-enter-active {
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 300ms, transform 300ms;
+}

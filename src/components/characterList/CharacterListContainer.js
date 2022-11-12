@@ -11,7 +11,7 @@ const CharacterListContainer = (props) => {
   const [charList, setCharList] = useState([])
   const [newLoading, setNewLoading] = useState(false)
   const [end, setEnd] = useState(false)
-  const [offsetCharacters, setOffsetCharacters] = useState(210)
+  const [offsetCharacters, setOffsetCharacters] = useState(125)
   const { getAllCharacters, loading, error, clearError } = useMarvelAPI()
 
   const downloadComplete = (charListNew) => {
@@ -39,6 +39,7 @@ const CharacterListContainer = (props) => {
     display: (end || (loading && !newLoading)) && "none",
     opacity: newLoading && 0.5,
   }
+  // const styleDiv = { height: charList.length === 0 && 500 }
 
   //debugger
   console.log("Render Char List")
@@ -46,7 +47,7 @@ const CharacterListContainer = (props) => {
     <div className="char__list">
       {errorImg}
       {spinner}
-        <CharacterList charList={charList} setCharItemId={props.setCharItemId} />
+      <CharacterList charList={charList} setCharItemId={props.setCharItemId} />
       <button
         className="button button__main button__long"
         disabled={newLoading}

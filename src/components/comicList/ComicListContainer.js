@@ -34,7 +34,6 @@ const ComicListContainer = () => {
 
   const errorImg = error && <ErrorMessage />
   const spinner = loading && !newLoading && <Spinner marginTop={250} />
-
   const styleBtn = {
     display: (end || (loading && !newLoading)) && "none",
     opacity: newLoading && 0.5,

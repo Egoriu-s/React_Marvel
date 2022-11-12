@@ -21,7 +21,7 @@ const CharacterList = ({ charList, setCharItemId }) => {
             : { objectFit: 'cover' }
         return (
             <CSSTransition
-                timeout={1000}
+                timeout={5000}
                 key={elem.id}
                 classNames="alert">
                 <li className="char__item"

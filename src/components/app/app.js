@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom"
 import AppHeader from './../appHeader/AppHeader'
 import "./app.scss"
 const ComicsPage = lazy(() => import('../pages/ComicsPage'))
+const SingleCharPage = lazy(() => import('../pages/SingleCharPage'))
 const SingleComicPage = lazy(() => import('../pages/SingleComicPage'))
 const NotFound404 = lazy(() => import('../pages/404'))
 const MainPage = lazy(() => import('../pages/MainPage'))
@@ -18,7 +19,9 @@ const App = () => {
         <main>
           <Suspense fallback={<div>loading...</div>}>
             <Routes>
+              <Route path='//Petrichenko_React_Marvel' element={<MainPage />} />
               <Route path="/" element={<MainPage />} />
+              <Route path="/characters/:charId" element={<SingleCharPage />} />
               <Route path="/comics" element={<ComicsPage />} />
               <Route path="/comics/:comicId" element={<SingleComicPage />} />
               <Route path="*" element={<NotFound404 />} />
