@@ -1,38 +1,30 @@
 import { useState, useEffect, memo } from 'react'
 import useMarvelAPI from './../../services/Api'
 import CharacterInfo from './CharacterInfo'
-import ErrorMessageCustom from '../secondaryComponents/errorMessage/Error'
-import Skeleton from '../secondaryComponents/skeleton/Skeleton'
-import Spinner from '../secondaryComponents/spinner/Spinner'
 import './characterInfo.scss'
+import StateMachine from '../../utils.js/StateMachine'
 
 
 const CharacterInfoContainer = (props) => {
 
     const [charInfo, setCharInfo] = useState(null)
-    const { getCharacter, error, clearError, loading } = useMarvelAPI()
+    const { getCharacter, clearError, process, setProcess } = useMarvelAPI()
+
     const load = (id) => {
         clearError()
         getCharacter(id)
             .then(charInfo => setCharInfo(charInfo))
+            .then(() => setProcess('done'))
     }
     useEffect(() => {
         if (props.id !== null) load(props.id)
     }, [props.id])
 
-    const skeleton = !(loading || error || charInfo) && <Skeleton />
-    const spinner = loading && <Spinner />
-    const errorImg = error && <ErrorMessageCustom />
-    const content = !(loading || error || !charInfo) && <CharacterInfo charInfo={charInfo} />
-
     //debugger
     console.log('Render Info')
     return (
         <div className="char__info">
-            {spinner}
-            {errorImg}
-            {skeleton}
-            {content}
+            {StateMachine(process, CharacterInfo, charInfo)}
             <p className="char__select">Please select a character to see information</p>
 
         </div>

@@ -36,7 +36,7 @@ const CharacterList = ({ charList, setCharItemId }) => {
     })
 
     //debugger
-    console.log("Render Char List JSX")
+    //console.log("Render Char List JSX")
     return (
         <>
             <ul className="char__grid">

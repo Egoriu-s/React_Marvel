@@ -5,7 +5,7 @@ const useMarvelAPI = () => {
   const __apiKey = `ec937b49a92b5506cf1ffa3bc211029f`
   const __offsetBaseChar = 125
   const __offsetBaseComics = 40
-  const { request, loading, error, clearError } = useHttp()
+  const { request, clearError, process, setProcess } = useHttp()
 
   const transformAllCharacters = (response) => {
     const total = response.data.total
@@ -101,9 +101,9 @@ const useMarvelAPI = () => {
     getCharacterByName,
     getAllComics,
     getComic,
-    loading,
-    error,
     clearError,
+    process,
+    setProcess
   }
 
 }

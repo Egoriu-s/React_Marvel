@@ -1,14 +1,14 @@
 import './randomCharacter.scss'
 
-const RandomCharacter = ({ randomChar }) => {
+const RandomCharacter = ({ data }) => {
 
-    const { thumbnail, name, description, homepage, wiki } = randomChar;
+    const { thumbnail, name, description, homepage, wiki } = data
     let imgStyle = thumbnail === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
         ? { objectFit: 'contain' }
         : { objectFit: 'cover' }
 
     //debugger
-    console.log("Render Random JSX")
+    //console.log("Render Random JSX")
     return (
         <div className="randomchar__block">
             <img src={thumbnail} alt="Random character" className="randomchar__img" style={imgStyle} />

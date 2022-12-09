@@ -31,7 +31,7 @@ const ComicList = ({ comicList }) => {
     })
 
     //debugger
-    console.log("Render Comic List JSX")
+    //console.log("Render Comic List JSX")
     return (
         <>
             <div className="comics__list">

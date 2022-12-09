@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom'
 
-const SingleComic = ({ comic }) => {
+const SingleComic = ({ data }) => {
     //debugger
-    const { title, description, language, pageCount, price, thumbnail } = comic
+    const { title, description, language, pageCount, price, thumbnail } = data
     const imgStyle = thumbnail === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
         ? { objectFit: 'contain' }
         : { objectFit: 'cover' }
 
     //debugger
-    console.log("Render Single Comic JSX")
+    //console.log("Render Single Comic JSX")
     return (
         <div className="single-comic">
             <img src={thumbnail} alt="comicImg" className="single-comic__img" style={imgStyle} />

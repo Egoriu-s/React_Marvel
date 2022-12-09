@@ -1,39 +1,35 @@
 import { useState, useEffect, memo } from 'react'
 import useMarvelAPI from './../../services/Api'
-import Spinner from '../secondaryComponents/spinner/Spinner'
-import ErrorMessage from '../secondaryComponents/errorMessage/Error'
 import RandomCharacter from './RandomCharacter'
+import StateMachine from '../../utils.js/StateMachine'
 import './randomCharacter.scss'
 import mjolnir from '../../resources/img/mjolnir.png'
+
+
 
 const RandomCharacterContainer = () => {
 
     const [randomChar, setRandomChar] = useState(null)
     const [disable, setDisable] = useState(true)
-    const { getCharacter, loading, error, clearError } = useMarvelAPI()
+    const { getCharacter, clearError, process, setProcess } = useMarvelAPI()
 
     const load = (initial) => {
         clearError()
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000)
         getCharacter(id)
             .then(randomCharNew => setRandomChar(randomCharNew))
+            .then(() => setProcess('done'))
         initial && setDisable(false)
     }
-
     useEffect(() => load(true), [])
 
-    const errorImg = error && <ErrorMessage />
-    const spinner = loading && <Spinner />
-    const content = !(loading || error || !randomChar) && <RandomCharacter randomChar={randomChar} />
-    const styleBtn = { opacity: loading && 0.5 }
+    const styleBtn = { opacity: process === 'fetching' && 0.5 }
 
     //debugger
     console.log('Render Random')
     return (
         <div className="randomchar">
-            {errorImg}
-            {spinner}
-            {content}
+            {StateMachine(process, RandomCharacter, randomChar)}
             <div className="randomchar__static">
                 <p className="randomchar__title">
                     Random character for today!<br />
@@ -44,7 +40,7 @@ const RandomCharacterContainer = () => {
                 </p>
                 <button onClick={load}
                     className="button button__main"
-                    disabled={disable || loading}
+                    disabled={disable || process === 'fetching'}
                     style={styleBtn}>
                     <div className="inner">try it</div>
                 </button>

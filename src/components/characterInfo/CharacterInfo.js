@@ -2,15 +2,15 @@ import { memo } from "react"
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import './characterInfo.scss';
 
-const CharacterInfo = ({ charInfo }) => {
-    //debugger
-    const { thumbnail, name, homepage, wiki, description, comics } = charInfo;
+const CharacterInfo = ({ data }) => {
+
+    const { thumbnail, name, homepage, wiki, description, comics } = data
     const imgStyle = thumbnail === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
         ? { objectFit: 'contain' }
         : { objectFit: 'cover' }
 
     //debugger
-    console.log("Render Info JSX")
+    //console.log("Render Info JSX")
     return (
         <>
 
@@ -59,4 +59,4 @@ const CharacterInfo = ({ charInfo }) => {
 
 }
 
-export default memo(CharacterInfo, (prevProps, newProps) => prevProps.charInfo.id === newProps.charInfo.id)
+export default memo(CharacterInfo, (prevProps, newProps) => prevProps.data.id === newProps.data.id)

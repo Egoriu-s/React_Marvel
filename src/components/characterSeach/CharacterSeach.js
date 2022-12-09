@@ -1,7 +1,7 @@
 import { Formik, Form, Field, ErrorMessage as FormikErrorMessage } from "formik"
 import *as Yup from 'yup'
 import { Link } from "react-router-dom"
-import { useState } from "react"
+import { useState, memo } from "react"
 import useMarvelAPI from './../../services/Api'
 import ErrorMessage from '../secondaryComponents/errorMessage/Error'
 import './characterSearch.scss'
@@ -12,6 +12,8 @@ const CharacterSearch = () => {
     const [foundChar, setFoundChar] = useState(null)
     const { getCharacterByName, loading, error } = useMarvelAPI()
 
+    //debugger
+    console.log('Render Search Form')
     return (
         <div>
             <Formik
@@ -64,4 +66,4 @@ const CharacterSearch = () => {
     )
 }
 
-export default CharacterSearch
+export default memo(CharacterSearch)

@@ -5,6 +5,21 @@ import Spinner from "../secondaryComponents/spinner/Spinner"
 import useMarvelAPI from "./../../services/Api"
 import "./characterList.scss"
 
+const StateMachineCharList = (process, data_0, data_1, newLoading) => {
+
+  //debugger
+  //console.log("State Machine")
+  switch (process) {
+    case 'waiting': return []
+    case 'fetching': return newLoading
+      ? <CharacterList charList={data_0} setCharItemId={data_1} />
+      : <Spinner marginTop={50} />
+    case 'error': return <ErrorMessage />
+    case 'done': return <CharacterList charList={data_0} setCharItemId={data_1} />
+    default: throw new Error
+
+  }
+}
 
 const CharacterListContainer = (props) => {
 
@@ -12,7 +27,8 @@ const CharacterListContainer = (props) => {
   const [newLoading, setNewLoading] = useState(false)
   const [end, setEnd] = useState(false)
   const [offsetCharacters, setOffsetCharacters] = useState(125)
-  const { getAllCharacters, loading, error, clearError } = useMarvelAPI()
+
+  const { getAllCharacters, clearError, process, setProcess } = useMarvelAPI()
 
   const downloadComplete = (charListNew) => {
     const end = charListNew.total - offsetCharacters > 9 ? false : true
@@ -25,29 +41,23 @@ const CharacterListContainer = (props) => {
     clearError()
     getAllCharacters(offset)
       .then(downloadComplete)
-      .finally(() => {
-        setNewLoading(false)
-      })
+      .then(() => setProcess('done'))
+      .finally(() => setNewLoading(false))
   }
   const loadMoreCharacter = (offset) => charListLoading(offset)
 
   useEffect(() => charListLoading(offsetCharacters, true), [])
 
-  const errorImg = error && <ErrorMessage />
-  const spinner = loading && !newLoading && <Spinner marginTop={50} />
   const styleBtn = {
-    display: (end || (loading && !newLoading)) && "none",
+    display: (end || (process === "fetching" && !newLoading)) && "none",
     opacity: newLoading && 0.5,
   }
-  // const styleDiv = { height: charList.length === 0 && 500 }
 
   //debugger
   console.log("Render Char List")
   return (
     <div className="char__list">
-      {errorImg}
-      {spinner}
-      <CharacterList charList={charList} setCharItemId={props.setCharItemId} />
+      {StateMachineCharList(process, charList, props.setCharItemId, newLoading)}
       <button
         className="button button__main button__long"
         disabled={newLoading}
