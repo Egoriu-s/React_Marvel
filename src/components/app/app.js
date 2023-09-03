@@ -35,3 +35,26 @@ const App = () => {
 }
 
 export default App
+
+// function arrayDiff1(a, b) {
+//   if (b.length === 0) return a
+//   //debugger
+//   for (let i = 0; i < b.length; i++) {
+//     for (let j = 0; j < a.length; j++) {
+//       debugger
+//       if (a[j] === b[i]) {
+//         a.splice(j, 1)
+//         j--
+//       }
+//     }
+//   }
+//   return a
+// }
+
+function arrayDiff(a, b) {
+  if (b.length === 0) return a
+  for (let i = 0; i < b.length; i++) a = a.filter(elem => elem !== b[i])
+  return a
+}
+
+console.log(arrayDiff([1, 2, 2, 4, -10.5, 0, "hello"], [2, 0]))
